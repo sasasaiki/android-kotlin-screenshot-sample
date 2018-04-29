@@ -27,6 +27,14 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(intent,CaptureActivity.REQUEST_CAPTURE)
         }
 
+        val intent = Intent(this, MyService::class.java)
+        startService(intent)
+
+        // receiver
+        val receiver = CaptureEndReceiver()
+        val filter = IntentFilter()
+        filter.addAction(CaptureActivity.EndCaptureActionName)
+        registerReceiver(receiver, filter)
     }
 
     fun setImage(image:Bitmap){
@@ -49,9 +57,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        //ScreenCaptureService(Intent)を実行した直後ここに入ってくる
-        if (requestCode == CaptureActivity.REQUEST_CAPTURE) {
+    inner class CaptureEndReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
             val bitMap = ImageCache[ImageCache.Key.TmpScreenShot.str]
             bitMap?.let { setImage(it) }
         }

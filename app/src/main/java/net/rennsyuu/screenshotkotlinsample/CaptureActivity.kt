@@ -13,6 +13,7 @@ class CaptureActivity : AppCompatActivity() {
 
     companion object {
         const val REQUEST_CAPTURE = 1
+        const val EndCaptureActionName = "ON_END_CAPTURE"
     }
     var projection: MediaProjection? = null
 
@@ -46,11 +47,20 @@ class CaptureActivity : AppCompatActivity() {
     private fun doCapture() {
         projection?.let {
             capture.run(it) {bitMap ->
+                //キャプチャを止めないと呼ばれ続ける
+                disableCapture()
                 // save bitmap
                 ImageCache.put(ImageCache.Key.TmpScreenShot.str,bitmap = bitMap)
+                sendMessage()
                 finish()
             }
         }
+    }
+
+    private fun sendMessage() {
+        val broadcast = Intent()
+        broadcast.action = EndCaptureActionName
+        baseContext.sendBroadcast(broadcast)
     }
 
     private fun disableCapture() {

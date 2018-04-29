@@ -19,14 +19,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CaptureActivity"
-            android:theme="@style/Theme.TranslucentBackground"/>
+        <activity
+            android:name=".CaptureActivity"
+            android:theme="@style/Theme.TranslucentBackground" />
+
 
         <service
-            android:name=".CaptureService"
+            android:name=".MyService"
             android:enabled="true"
-            android:exported="true"
-            android:permission="" />
+            android:exported="false" />
     </application>
 
 </manifest>

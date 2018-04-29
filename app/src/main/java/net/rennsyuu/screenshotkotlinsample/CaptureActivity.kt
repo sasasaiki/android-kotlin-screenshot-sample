@@ -13,7 +13,7 @@ class CaptureActivity : AppCompatActivity() {
 
     companion object {
         const val REQUEST_CAPTURE = 1
-        const val EndCaptureActionName = "ON_END_CAPTURE"
+        const val END_CAPTURE_ACTION_NAME = "ON_END_CAPTURE"
     }
     var projection: MediaProjection? = null
 
@@ -59,7 +59,7 @@ class CaptureActivity : AppCompatActivity() {
 
     private fun sendMessage() {
         val broadcast = Intent()
-        broadcast.action = EndCaptureActionName
+        broadcast.action = END_CAPTURE_ACTION_NAME
         baseContext.sendBroadcast(broadcast)
     }
 

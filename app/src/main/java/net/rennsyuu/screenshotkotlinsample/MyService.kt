@@ -19,7 +19,7 @@ class MyService : Service() {
         // receiver
         val receiver = CaptureEndReceiver()
         val filter = IntentFilter()
-        filter.addAction(CaptureActivity.EndCaptureActionName)
+        filter.addAction(CaptureActivity.END_CAPTURE_ACTION_NAME)
         registerReceiver(receiver, filter)
         return super.onStartCommand(intent, flags, startId)
     }

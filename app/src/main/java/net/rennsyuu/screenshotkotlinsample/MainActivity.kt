@@ -33,28 +33,12 @@ class MainActivity : AppCompatActivity() {
         // receiver
         val receiver = CaptureEndReceiver()
         val filter = IntentFilter()
-        filter.addAction(CaptureActivity.EndCaptureActionName)
+        filter.addAction(CaptureActivity.END_CAPTURE_ACTION_NAME)
         registerReceiver(receiver, filter)
     }
 
     fun setImage(image:Bitmap){
         image_view.setImageBitmap(image)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     inner class CaptureEndReceiver : BroadcastReceiver() {

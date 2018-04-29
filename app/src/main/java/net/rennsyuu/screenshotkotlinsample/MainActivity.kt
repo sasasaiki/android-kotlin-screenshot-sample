@@ -24,14 +24,9 @@ class MainActivity : AppCompatActivity() {
 
         fab.setOnClickListener {
             val intent = Intent(this, CaptureActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent,CaptureActivity.REQUEST_CAPTURE)
         }
 
-        // receiver
-        val receiver = CaptureEndReceiver()
-        val filter = IntentFilter()
-        filter.addAction(CaptureService.CaptureEndActionName)
-        registerReceiver(receiver, filter)
     }
 
     fun setImage(image:Bitmap){
@@ -54,8 +49,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    inner class CaptureEndReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        //ScreenCaptureService(Intent)を実行した直後ここに入ってくる
+        if (requestCode == CaptureActivity.REQUEST_CAPTURE) {
             val bitMap = ImageCache[ImageCache.Key.TmpScreenShot.str]
             bitMap?.let { setImage(it) }
         }

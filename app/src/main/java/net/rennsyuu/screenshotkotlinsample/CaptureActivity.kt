@@ -15,8 +15,8 @@ class CaptureActivity : AppCompatActivity() {
         const val REQUEST_CAPTURE = 1
         const val END_CAPTURE_ACTION_NAME = "ON_END_CAPTURE"
     }
-    var projection: MediaProjection? = null
 
+    private var projection: MediaProjection? = null
     private lateinit var mediaProjectionManager: MediaProjectionManager
     private val capture = Capture(this)
 

@@ -9,12 +9,14 @@ object ImageCache {
         TmpScreenShot("TmpScreenShot")
     }
 
-    private const val CACHE_SIZE_BASE = 5
-    private const val CACHE_SIZE = CACHE_SIZE_BASE * 1024 * 1024
+    //キャッシュサイズをbyteで制限する場合
+//    private const val CACHE_SIZE_BASE = 5
+//    private const val CACHE_SIZE = CACHE_SIZE_BASE * 1024 * 1024
 
     private val sLruCache: LruCache<String, Bitmap>
 
     init {
+        //キャッシュサイズをbyteで制限する場合、CACHE_SIZEを渡しsizeOfをoverrideする
         sLruCache = object : LruCache<String, Bitmap>(1) {
 //            override fun sizeOf(key: String, value: Bitmap): Int {
 //                return value.rowBytes * value.height

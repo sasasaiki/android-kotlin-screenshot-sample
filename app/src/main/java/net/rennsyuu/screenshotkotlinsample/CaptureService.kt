@@ -15,7 +15,6 @@ class CaptureService : Service() {
     }
 
     enum class Action(val str: String) {
-        StartCapture("start_capture"),
         DoCapture("enable_capture")
     }
 
@@ -24,28 +23,15 @@ class CaptureService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null) {
             when (intent.action) {
-                Action.StartCapture.str-> startCapture()
                 Action.DoCapture.str -> doCapture()
             }
         }
         return Service.START_STICKY
     }
 
-    private fun startCapture() {
-        if (CaptureActivity.projection == null) {
-            val intent = Intent(this, CaptureActivity::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-        } else {
-            //念のため書いたが今回は毎回capture.stop()しているので基本的にここには入らない
-            doCapture()
-        }
-    }
-
     private fun doCapture() {
-        CaptureActivity.projection?.run {
-            capture.run(this) {bitMap ->
-                capture.stop()
+        CaptureActivity.projection?.let {
+            capture.run(it) {bitMap ->
                 // save bitmap
                 ImageCache.put(ImageCache.Key.TmpScreenShot.str,bitmap = bitMap)
                 sendMessage()

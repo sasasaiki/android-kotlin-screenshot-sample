@@ -23,9 +23,8 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener {
-            val intent = Intent(this, CaptureService::class.java)
-                .setAction(CaptureService.Action.StartCapture.str)
-            startService(intent)
+            val intent = Intent(this, CaptureActivity::class.java)
+            startActivity(intent)
         }
 
         // receiver

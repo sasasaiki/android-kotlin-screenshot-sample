@@ -7,13 +7,8 @@ import android.hardware.display.DisplayManager
 import android.hardware.display.VirtualDisplay
 import android.media.ImageReader
 import android.media.projection.MediaProjection
-import android.util.Log
 
-class Capture(val context: Context) : ImageReader.OnImageAvailableListener {
-
-    companion object {
-        private val TAG = "CLog"
-    }
+class Capture(private val context: Context) : ImageReader.OnImageAvailableListener {
 
     private var display: VirtualDisplay? = null
     private var onCaptureListener: ((Bitmap) -> Unit)? = null
@@ -31,12 +26,10 @@ class Capture(val context: Context) : ImageReader.OnImageAvailableListener {
             val reader = ImageReader.newInstance(
                     widthPixels, heightPixels, PixelFormat.RGBA_8888, maxImages)
             reader.setOnImageAvailableListener(this@Capture, null)
-            val display = mediaProjection.createVirtualDisplay(
+            return mediaProjection.createVirtualDisplay(
                     "Capture Display", widthPixels, heightPixels, densityDpi,
                     DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
                     reader.surface, null, null)
-            Log.d(TAG, "createVirtualDisplay")
-            return display
         }
     }
 
@@ -47,7 +40,6 @@ class Capture(val context: Context) : ImageReader.OnImageAvailableListener {
     }
 
     private fun captureImage(reader: ImageReader): Bitmap {
-        Log.d(TAG, "captureImage")
         val image = reader.acquireLatestImage()
         context.resources.displayMetrics.run {
             image.planes[0].run {

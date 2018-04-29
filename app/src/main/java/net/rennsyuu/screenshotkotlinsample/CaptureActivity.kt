@@ -20,16 +20,22 @@ class CaptureActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.empty)
         mediaProjectionManager = getSystemService(Service.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
         startActivityForResult(mediaProjectionManager.createScreenCaptureIntent(), REQUEST_CAPTURE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        //ScreenCaptureService(Intent)を実行した直後ここに入ってくる
         if (requestCode == REQUEST_CAPTURE) {
             if (resultCode == RESULT_OK) {
                 projection = mediaProjectionManager.getMediaProjection(resultCode, data)
                 val intent = Intent(this, CaptureService::class.java)
-                        .setAction(CaptureService.Action.EnableCapture.str)
+                       .setAction(CaptureService.Action.DoCapture.str)
+
+                //初回の許可確認ダイアログが出た場合に閉じきる前に取られてしまうので少しだけ待つ
+                Thread.sleep(100)
+
                 startService(intent)
             } else {
                 projection = null

@@ -3,7 +3,6 @@ package net.rennsyuu.screenshotkotlinsample
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import android.util.Log
 import net.rennsyuu.screenshotkotlinsample.common.ImageCache
 
 class CaptureService : Service() {
@@ -12,13 +11,12 @@ class CaptureService : Service() {
     }
 
     companion object {
-        private val TAG = "CSLog"
         const val CaptureEndActionName = "ON_CAPTURE_END"
     }
 
     enum class Action(val str: String) {
         StartCapture("start_capture"),
-        EnableCapture("enable_capture")
+        DoCapture("enable_capture")
     }
 
     private val capture = Capture(this)
@@ -27,7 +25,7 @@ class CaptureService : Service() {
         if (intent != null) {
             when (intent.action) {
                 Action.StartCapture.str-> startCapture()
-                Action.EnableCapture.str -> onEnableCapture()
+                Action.DoCapture.str -> doCapture()
             }
         }
         return Service.START_STICKY
@@ -35,21 +33,20 @@ class CaptureService : Service() {
 
     private fun startCapture() {
         if (CaptureActivity.projection == null) {
-            Log.d(TAG, "startActivity(CaptureActivity)")
             val intent = Intent(this, CaptureActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         } else {
-            onEnableCapture()
+            //念のため書いたが今回は毎回capture.stop()しているので基本的にここには入らない
+            doCapture()
         }
     }
 
-    private fun onEnableCapture() {
+    private fun doCapture() {
         CaptureActivity.projection?.run {
             capture.run(this) {bitMap ->
                 capture.stop()
                 // save bitmap
-                Log.d("debug","キャプチャ取ったよ")
                 ImageCache.put(ImageCache.Key.TmpScreenShot.str,bitmap = bitMap)
                 sendMessage()
                 stopSelf()
